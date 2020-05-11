@@ -1,0 +1,6 @@
+scipy
+z3-solver
+seaborn
+matplotlib
+scikit-learn
+numpy pandas
