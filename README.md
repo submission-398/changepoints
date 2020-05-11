@@ -4,5 +4,5 @@ On this companion website we provide the supplementary material to our submissio
 Find the information on the respective sub-pages:
 * [RQ1: Controlled Experiment Setup](controlled/README.md)
 * [RQ2: Real-World Experiment Setup](realworld/README.md)
-* [Reference Implementation](implementation/change_point_identification.py)
+* [Reference Implementation](implementation/README.md)
 
