@@ -521,7 +521,23 @@ class ChangePointLearner:
         ys = np.vstack(ys)
 
         # Estimate change point locations
-        cp_locations = find_peaks(np.sum(ys, axis=0))[0]
+        #cp_locations = find_peaks(np.sum(ys, axis=0))[0]
+        pxs = []
+        for a in range(len(self.sample)):
+            cpl = self.change_point_likelihoods[a]
+            peaks = find_peaks(cpl, ((1.0 / n_commits) + N * np.nanstd(self.change_point_likelihoods[a])))[0]
+            for peak in peaks:
+                pxs.append(peak)
+
+        bandwidths = 10 ** np.linspace(-1, 1, 100)
+        grid = GridSearchCV(KernelDensity(kernel='exponential'), {'bandwidth': bandwidths})
+        pxs = np.array(pxs)
+        grid.fit(pxs.reshape(-1, 1))
+        kde = grid.best_estimator_
+        estimated_density = np.exp(kde.score_samples(np.arange(n_commits).reshape(-1, 1)))
+
+        cp_locations = find_peaks(estimated_density)[0]
+
         cp_estimations = []
 
         for i, v in enumerate(cp_locations):
@@ -796,4 +812,3 @@ if __name__ == "__main__":
 
     print(synth.changepoints)
     print(synth.term_matrix)
-
